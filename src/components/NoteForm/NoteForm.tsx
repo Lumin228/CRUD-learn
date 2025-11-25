@@ -1,9 +1,12 @@
+import { createPortal } from 'react-dom'
 import css from './NoteForm.module.css'
 
 
 
 function NoteForm() {
-    return (
+
+    
+    return createPortal(
         <form className={css.form}>
             <div className={css.formGroup}>
                 <label htmlFor="title">Title</label>
@@ -46,7 +49,7 @@ function NoteForm() {
                     Create note
                 </button>
             </div>
-        </form>
+        </form>, document.body
     )
 }
 

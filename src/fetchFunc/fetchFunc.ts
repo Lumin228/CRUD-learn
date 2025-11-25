@@ -11,13 +11,14 @@ interface NotesResponse {
 
 export const fetchFunc = async (): Promise<NotesResponse> => {
   const response = await axios.get(
-    `https://notehub-public.goit.study/api/notes?page=1&perPage=10&sortBy=created`,
+    `https://notehub-public.goit.study/api/notes?page=1&perPage=12&sortBy=created`,
     {
       headers: {
         'Authorization': `Bearer ${API_KEY}`,
       },
     }
   );
-
+  console.log(response.data);
+  
   return response.data;
 };
