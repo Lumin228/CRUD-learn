@@ -1,23 +1,30 @@
-import ReactPaginate from "react-paginate";
-import { useState } from "react";
 import css from "./Pagination.module.css";
+import * as ReactPaginateLib from 'react-paginate';
 
-function Pagination({ pages }: { pages: number }) {
-  const [page, setPage] = useState(1);
+// Support both ESM default export and CommonJS namespace import
+const ReactPaginate: any = (ReactPaginateLib as any)?.default ?? ReactPaginateLib;
 
-  return (<>
+interface PaginationProps {
+  pages: number;
+  changePage: (page: number) => void;
+  currentPage: number;
+}
+
+
+function Pagination({ pages, changePage, currentPage }: PaginationProps) {
+
+  return (
     <ReactPaginate
-      pageCount={pages}
-      pageRangeDisplayed={5}
-      marginPagesDisplayed={1}
-      onPageChange={({ selected }) => setPage(selected + 1)}
-      forcePage={page - 1}
-      containerClassName={css.pagination}
-      activeClassName={css.active}
-      nextLabel="→"
-      previousLabel="←"
-    />
-    </>
+        pageCount={pages}
+        pageRangeDisplayed={5}
+        marginPagesDisplayed={1}
+        onPageChange={({ selected }) => changePage(selected + 1)}
+        forcePage={currentPage - 1}
+        containerClassName={css.pagination}
+        activeClassName={css.active}
+        nextLabel="→"
+        previousLabel="←"
+      />
   );
 }
 

@@ -1,21 +1,23 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import css from './App.module.css'
 import SearchBox from '../SearchBox/SearchBox'
 import Pagination from '../Pagination/Pagination'
 import { fetchFunc } from '../../fetchFunc/fetchFunc'
 import NoteList from '../NoteList/NoteList'
-import { Note } from '../../types/types'
-import NoteForm from '../NoteForm/NoteForm'
+import Modal from '../Modal/Modal'
+import { useQuery } from '@tanstack/react-query'
 
 
 function App() {
-  const [notes, setNotes] = useState<Note[]>([])
+  const [page, setPage] = useState<number>(1);
   const [openForm, setOpenForm] = useState<boolean>(false)
-  useEffect(() => {
-    fetchFunc().then(data => {
-      setNotes(data.notes)
-    });
-  }, [])
+  const [topic, setTopic] = useState<string>('car')
+
+  const { data, isLoading, error, isError } = useQuery({
+    queryKey: ['notes', topic, page],
+    queryFn: () => fetchFunc(topic),
+  });
+
 
 
   return (
@@ -23,12 +25,15 @@ function App() {
       <div className={css.app}>
         <header className={css.toolbar}>
           <SearchBox />
-          {/* {notes && notes.length > 0 && (<Pagination pages={totalPages}/>)} */}
+          {data && data.totalPages && data.totalPages > 0 && (
+            <Pagination pages={data.totalPages} changePage={setPage} currentPage={page} />
+)}
           <button className={css.button} onClick={() => setOpenForm(true)}>Create note</button>
         </header>
         <main>
-          {openForm && (<NoteForm />)}
-          {notes.length > 0 && <NoteList list={notes} />}
+          {openForm && (<Modal onClose={setOpenForm} />)}
+          {data && data.notes && data.notes.length > 0 && <NoteList list={data.notes} />}
+
         </main>
       </div>
     </>

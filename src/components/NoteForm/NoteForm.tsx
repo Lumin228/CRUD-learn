@@ -1,12 +1,15 @@
 import { createPortal } from 'react-dom'
 import css from './NoteForm.module.css'
 
+interface NoteFormProps {
+    onClose: (value: boolean) => void
+}
 
 
-function NoteForm() {
+function NoteForm({onClose}: NoteFormProps) {
 
     
-    return createPortal(
+    return (
         <form className={css.form}>
             <div className={css.formGroup}>
                 <label htmlFor="title">Title</label>
@@ -38,7 +41,7 @@ function NoteForm() {
             </div>
 
             <div className={css.actions}>
-                <button type="button" className={css.cancelButton}>
+                <button type="button" className={css.cancelButton} onClick={() => onClose(false)}>
                     Cancel
                 </button>
                 <button
@@ -49,7 +52,7 @@ function NoteForm() {
                     Create note
                 </button>
             </div>
-        </form>, document.body
+        </form>
     )
 }
 
